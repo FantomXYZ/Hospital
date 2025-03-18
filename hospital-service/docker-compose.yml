@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  hospital_db:
+    container_name: hospital_db
+    image: postgres:15
+    volumes:
+      - hospital_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: hospital_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    ports:
+      - "5432:5432"
+    networks:
+      - hospital-network
+    restart: unless-stopped
+
+  keycloak:
+    container_name: keycloak
+    hostname: keycloak
+    image: quay.io/keycloak/keycloak:24.0
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://hospital_db:5432/hospital_db
+      KC_DB_USERNAME: user
+      KC_DB_PASSWORD: user
+      KC_HEALTH_ENABLED: "true"
+      KC_FEATURES: scripts,token-exchange
+      KEYCLOAK_IMPORT: /opt/keycloak/data/import/realm-export.json
+      KC_HOSTNAME_URL: http://keycloak:8080
+    volumes:
+      - ./realm-export/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    ports:
+      - "8082:8080"
+    command:
+      - start-dev
+      - --import-realm
+    depends_on:
+      - hospital_db
+    networks:
+      - hospital-network
+    restart: unless-stopped
+
+  hospital-app:
+    container_name: hospital-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://hospital_db:5432/hospital_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: user
+      KEYCLOAK_URL: http://keycloak:8080
+
+      POSTGRES_HOST: hospital_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+      POSTGRES_PORT: 5432
+      KEYCLOAK_HOST: keycloak
+      KEYCLOAK_PORT: 8080
+      SERVER_PORT: 8181
+    ports:
+      - "8181:8181"
+    depends_on:
+      - hospital_db
+      - keycloak
+    networks:
+      - hospital-network
+    restart: unless-stopped
+
+volumes:
+  hospital_db:
+
+networks:
+  hospital-network:
+    driver: bridge

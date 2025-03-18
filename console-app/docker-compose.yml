@@ -1,0 +1,18 @@
+services:
+  feign_client:
+    container_name: feign_client
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      HOSPITAL_SERVICE_URL: http://hospital-app:8181
+    networks:
+      - hospital-service_hospital-network
+    restart: unless-stopped
+    ports:
+      - "8282:8282"
+
+networks:
+  hospital-service_hospital-network:
+    external: true
+

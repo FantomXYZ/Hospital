@@ -1,0 +1,19 @@
+server:
+  port: 8282
+
+spring:
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/hospital-realm
+          jwk-set-uri: http://keycloak:8080/realms/hospital-realm/protocol/openid-connect/certs
+
+keycloak:
+  auth-server-url: http://keycloak:8080
+  realm: hospital-realm
+  client-id: hospital-client
+  client-secret: QST4907o6jQuNL0ZQx0G1Ziq0bMAbCj3
+  username: doctor
+  password: doctor
+  token-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/token
