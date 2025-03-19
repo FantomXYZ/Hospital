@@ -67,5 +67,6 @@ hospital-app – контейнер с самим сервисом hospital-serv
 - **Username / Password:**
    1. **doctor** / **doctor** — роль `Practitioner`
    2. **jack** / **jack** — роль `Patient`
-Проверка ролей на стороне сервера реализована в SecurityConfig.
+
+### Проверка ролей на стороне сервера реализована в SecurityConfig.
    
