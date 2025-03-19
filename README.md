@@ -25,3 +25,7 @@
 1. Перейдите в каталог `hospital-service`:
    ```bash
    cd hospital-service
+   **Соберите приложение с помощью Maven**:
+   ```bash
+   mvn clean package
+   
