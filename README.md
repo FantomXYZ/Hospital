@@ -64,8 +64,8 @@ hospital-app – контейнер с самим сервисом hospital-serv
   `http://localhost:8082/realms/hospital-realm/protocol/openid-connect/token`
 - **Client ID:** `hospital-client`  
 - **Client Secret:** `QST4907o6jQuNL0ZQx0G1Ziq0bMAbCj3`
-Username / Password:
-1. **doctor** / **doctor** — роль `Practitioner`
-2. **jack** / **jack** — роль `Patient`
+- **Username / Password:**
+   1. **doctor** / **doctor** — роль `Practitioner`
+   2. **jack** / **jack** — роль `Patient`
 Проверка ролей на стороне сервера реализована в SecurityConfig.
    
